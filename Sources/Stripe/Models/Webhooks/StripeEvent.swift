@@ -464,17 +464,26 @@ public enum StripeEventObject: StripeModel {
 	case charge(StripeCharge)
 	case customer(StripeCustomer)
 	case invoice(StripeInvoice)
-	case paymentIntent(PaymentIntent)
+	case paymentIntent(StripePaymentIntent)
 	case subscription(StripeSubscription)
 	case invalid
 
+	enum ObjectCodingKey: String, CodingKey {
+		case object
+	}
+
 	public init(from decoder: Decoder) throws {
-		if let customer = try? StripeCustomer(from: decoder) {
-			self = .customer(customer)
-		} else if let invoice = try? StripeInvoice(from: decoder) {
-			self = .invoice(invoice)
-		} else {
-			self = .invalid
+		let object = try decoder
+			.container(keyedBy: ObjectCodingKey.self)
+			.decode(String.self, forKey: .object)
+
+		switch object {
+		case "customer": self = .customer(try StripeCustomer(from: decoder))
+		case "charge": self = .charge(try StripeCharge(from: decoder))
+		case "invoice": self = .invoice(try StripeInvoice(from: decoder))
+		case "payment_intent": self = .paymentIntent(try StripePaymentIntent(from: decoder))
+		case "subscription": self = .subscription(try StripeSubscription(from: decoder))
+		default: self = .invalid
 		}
 	}
 
@@ -491,7 +500,7 @@ public enum StripeEventObject: StripeModel {
 }
 
 public struct StripeEventData: StripeModel {
-	public let previousAttributes: [String: JSON]
+	public let previousAttributes: [String: JSON]?
 	public let object: StripeEventObject?
 
 	public enum CodingKeys: String, CodingKey {

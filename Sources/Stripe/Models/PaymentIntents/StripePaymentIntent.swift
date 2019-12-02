@@ -1,5 +1,5 @@
 //
-//  PaymentIntent.swift
+//  StripePaymentIntent.swift
 //  Stripe
 //
 //  Created by Kristian Andersen on 08/10/2019.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// The [PaymentIntent Object](https://stripe.com/docs/api/payment_intents/object).
-public struct PaymentIntent: StripeModel {
+public struct StripePaymentIntent: StripeModel {
     /// Unique identifier for the object.
     public var id: String
     /// String representing the object’s type. Objects of the same type share the same value.
@@ -26,15 +26,15 @@ public struct PaymentIntent: StripeModel {
     /// Populated when `status` is `canceled`, this is the time at which the PaymentIntent was canceled. Measured in seconds since the Unix epoch.
     public var canceledAt: Date?
     /// User-given reason for cancellation of this PaymentIntent, one of `duplicate`, `fraudulent`, `requested_by_customer`, or `failed_invoice`.
-    public var cancellationReason: PaymentIntentCancellationReason?
+    public var cancellationReason: StripePaymentIntentCancellationReason?
     /// Capture method of this PaymentIntent, one of `automatic` or `manual`.
-    public var captureMethod: PaymentIntentCaptureMethod?
+    public var captureMethod: StripePaymentIntentCaptureMethod?
     /// Charges that were created by this PaymentIntent, if any.
     public var charges: ChargesList?
     /// The client secret of this PaymentIntent. Used for client-side retrieval using a publishable key. Please refer to [dynamic authentication](https://stripe.com/docs/payments/dynamic-authentication) guide on how `client_secret` should be handled.
     public var clientSecret: String?
     /// Confirmation method of this PaymentIntent, one of `manual` or `automatic`.
-    public var confirmationMethod: PaymentIntentConfirmationMethod?
+    public var confirmationMethod: StripePaymentIntentConfirmationMethod?
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
     public var created: Date?
     /// Three-letter ISO currency code, in lowercase. Must be a supported currency.
@@ -77,7 +77,7 @@ public struct PaymentIntent: StripeModel {
     /// Extra information about a PaymentIntent. This will appear on your customer’s statement when this PaymentIntent succeeds in creating a charge.
     public var statementDescriptor: String?
     /// Status of this PaymentIntent, one of `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `canceled`, or `succeeded`.
-    public var status: PaymentIntentStatus?
+    public var status: StripePaymentIntentStatus?
     /// The data with which to automatically create a Transfer when the payment is finalized. See the PaymentIntents Connect usage guide for details.
     public var transferData: [String: String]?
     /// A string that identifies the resulting payment as part of a group. See the PaymentIntents Connect usage guide for details.
@@ -121,31 +121,31 @@ public struct PaymentIntent: StripeModel {
     }
 }
 
-public enum PaymentIntentCancellationReason: String, StripeModel {
+public enum StripePaymentIntentCancellationReason: String, StripeModel {
     case duplicate
     case fraudulent
     case requestedByCustomer = "requested_by_customer"
     case failedInvoice = "failed_invoice"
 }
 
-public enum PaymentIntentCaptureMethod: String, StripeModel {
+public enum StripePaymentIntentCaptureMethod: String, StripeModel {
     case automatic
     case manual
 }
 
-public enum PaymentIntentConfirmationMethod: String, StripeModel {
+public enum StripePaymentIntentConfirmationMethod: String, StripeModel {
     case automatic
     case manual
 }
 
-public struct PaymentIntentNextAction: StripeModel {
+public struct StripePaymentIntentNextAction: StripeModel {
     /// Contains instructions for authenticating a payment by redirecting your customer to another page or application.
-    public var redirectToUrl: PaymentIntentNextActionRedirectToUrl?
+    public var redirectToUrl: StripePaymentIntentNextActionRedirectToUrl?
     /// Type of the next action to perform, one of `redirect_to_url` or `use_stripe_sdk`.
-    public var type: PaymentIntentNextActionType?
+    public var type: StripePaymentIntentNextActionType?
 }
 
-public struct PaymentIntentNextActionRedirectToUrl: StripeModel {
+public struct StripePaymentIntentNextActionRedirectToUrl: StripeModel {
     /// If the customer does not exit their browser while authenticating, they will be redirected to this specified URL after completion.
     public var returnUrl: String?
     /// The URL you must redirect your customer to in order to authenticate the payment.
@@ -157,12 +157,12 @@ public struct PaymentIntentNextActionRedirectToUrl: StripeModel {
      */
 }
 
-public enum PaymentIntentNextActionType: String, StripeModel {
+public enum StripePaymentIntentNextActionType: String, StripeModel {
     case redirectToUrl = "redirect_to_url"
     case useStripeSDK = "use_stripe_sdk"
 }
 
-public enum PaymentIntentStatus: String, StripeModel {
+public enum StripePaymentIntentStatus: String, StripeModel {
     case requiresPaymentMethod = "requires_payment_method"
     case requiresConfirmation = "requires_confirmation"
     case requiresAction = "requires_action"
@@ -172,11 +172,11 @@ public enum PaymentIntentStatus: String, StripeModel {
     case succeeded
 }
 
-public struct PaymentIntentsList: StripeModel {
+public struct StripePaymentIntentsList: StripeModel {
     public var object: String
     public var hasMore: Bool?
     public var url: String?
-    public var data: [PaymentIntent]?
+    public var data: [StripePaymentIntent]?
 
     public enum CodingKeys: String, CodingKey {
         case object
