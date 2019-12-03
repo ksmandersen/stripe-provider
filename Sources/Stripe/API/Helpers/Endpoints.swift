@@ -133,6 +133,12 @@ internal enum StripeAPIEndpoint {
     case paymentIntentConfirm(String)
     case paymentIntentCapture(String)
     case paymentIntentCancel(String)
+
+	// MARK: - PAYMENT METHODS
+	case paymentMethod
+	case paymentMethods(String)
+	case paymentMethodsAttach(String)
+	case paymentMethodsDetach(String)
     
     var endpoint: String {
         switch self {
@@ -230,6 +236,11 @@ internal enum StripeAPIEndpoint {
         case .paymentIntentConfirm(let id): return APIBase + APIVersion + "payment_intents/\(id)/confirm"
         case .paymentIntentCapture(let id): return APIBase + APIVersion + "payment_intents/\(id)/capture"
         case .paymentIntentCancel(let id): return APIBase + APIVersion + "payment_intents/\(id)/cancel"
+
+		case .paymentMethod: return APIBase + APIVersion + "payment_methods"
+		case .paymentMethods(let id): return APIBase + APIVersion + "payment_method/\(id)"
+		case .paymentMethodsAttach(let id): return APIBase + APIVersion + "payment_method/\(id)/attach"
+		case .paymentMethodsDetach(let id): return APIBase + APIVersion + "payment_method/\(id)/detach"
         }
     }
 }

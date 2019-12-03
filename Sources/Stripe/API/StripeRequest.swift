@@ -23,6 +23,7 @@ extension StripeRequest {
     public func serializedResponse<SM: StripeModel>(response: HTTPResponse, worker: EventLoop) throws -> Future<SM> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
+		decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         guard response.status == .ok else {
             return try decoder.decode(StripeError.self, from: response, maxSize: 1_000_000, on: worker).map(to: SM.self){ error in
