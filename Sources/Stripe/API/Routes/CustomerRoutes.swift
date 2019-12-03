@@ -11,7 +11,7 @@ import Vapor
 public protocol CustomerRoutes {
     func create(accountBalance: Int?, coupon: String?, description: String?, email: String?, invoicePrefix: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: [String: Any]?, source: Any?, taxInfo: [String: String]?) throws -> Future<StripeCustomer>
     func retrieve(customer: String) throws -> Future<StripeCustomer>
-    func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
+    func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
     func delete(customer: String) throws -> Future<StripeDeletedObject>
     func listAll(filter: [String: Any]?) throws -> Future<StripeCustomersList>
     func addNewSource(customer: String, source: String, toConnectedAccount: String?) throws -> Future<StripeSource>
@@ -55,6 +55,7 @@ extension CustomerRoutes {
                        defaultSource: String? = nil,
                        description: String? = nil,
                        email: String? = nil,
+					   invoiceSettings: [String: Any]? = nil,
                        metadata: [String: String]? = nil,
                        shipping: ShippingLabel? = nil,
                        source: Any? = nil) throws -> Future<StripeCustomer> {
@@ -65,6 +66,7 @@ extension CustomerRoutes {
                           defaultSource: defaultSource,
                           description: description,
                           email: email,
+						  invoiceSettings: invoiceSettings,
                           metadata: metadata,
                           shipping: shipping,
                           source: source)
@@ -179,6 +181,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
                        defaultSource: String?,
                        description: String?,
                        email: String?,
+					   invoiceSettings: [String: Any]?,
                        metadata: [String: String]?,
                        shipping: ShippingLabel?,
                        source: Any?) throws -> Future<StripeCustomer> {
@@ -207,6 +210,10 @@ public struct StripeCustomerRoutes: CustomerRoutes {
         if let email = email {
             body["email"] = email
         }
+
+		if let invoiceSettings = invoiceSettings {
+			invoiceSettings.forEach { body["invoice_settings[\($0)]"] = $1 }
+		}
         
         if let metadata = metadata {
             metadata.forEach { body["metadata[\($0)]"] = $1 }
