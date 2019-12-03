@@ -30,6 +30,12 @@ public struct StripePaymentMethod: StripeModel {
 	public var metadata: [String: String]?
 	/// The type of the PaymentMethod, one of `card` or `card_present`. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
 	public var type: StripePaymentMethodType?
+
+	public enum CodingKeys: String, CodingKey {
+		case billingDetails = "billing_details"
+		case cardPresent = "card_present"
+		case id, object, card, created, customer, livemode, metadata, type
+	}
 }
 
 public struct StripePaymentMethodCard: StripeModel {
@@ -54,6 +60,13 @@ public struct StripePaymentMethodCard: StripeModel {
 	public var threeDSecureUsage: StripePaymentMethodCardThreeDSecureUsage?
 	/// If this Card is part of a card wallet, this contains the details of the card wallet.
 	public var wallet: StripePaymentMethodCardWallet?
+
+	public enum CodingKeys: String, CodingKey {
+		case expMonth = "exp_month"
+		case expYear = "exp_year"
+		case threeDSecureUsage = "three_d_secure_usage"
+		case brand, checks, country, funding, last4, wallet, fingerprint
+	}
 }
 
 public enum StripePaymentMethodCardBrand: String, StripeModel {
@@ -74,6 +87,12 @@ public struct StripePaymentMethodCardChecks: StripeModel {
 	public var addressPostalCodeCheck: StripeCardValidationCheck?
 	/// If a CVC was provided, results of the check, one of ‘pass’, ‘failed’, ‘unavailable’ or ‘unchecked’.
 	public var cvcCheck: StripeCardValidationCheck?
+
+	public enum CodingKeys: String, CodingKey {
+		case addressLine1Check = "address_line1_check"
+		case addressPostalCodeCheck = "address_postal_code_check"
+		case cvcCheck = "cvc_check"
+	}
 }
 
 public struct StripePaymentMethodCardThreeDSecureUsage: StripeModel {
@@ -102,6 +121,16 @@ public struct StripePaymentMethodCardWallet: StripeModel {
 	public var type: StripePaymentMethodCardWalletType?
 	/// If this is a `visa_checkout` card wallet, this hash contains details about the wallet.
 	public var visaCheckout: StripePaymentMethodCardWalletVisaCheckout?
+
+	public enum CodingKeys: String, CodingKey {
+		case amexExpressCheckout = "amex_express_checkout"
+		case dynamicLast4 = "dynamic_last4"
+		case applePay = "apple_pay"
+		case googlePay = "google_pay"
+		case samsungPay = "samsung_pay"
+		case visaCheckout = "visa_checkout"
+		case type, masterpass
+	}
 }
 
 public struct StripePaymentMethodCardWalletMasterPass: StripeModel {
@@ -113,6 +142,12 @@ public struct StripePaymentMethodCardWalletMasterPass: StripeModel {
 	public var name: String?
 	/// Owner’s verified shipping address. Values are verified or provided by the wallet directly (if supported) at the time of authorization or settlement. They cannot be set or mutated.
 	public var shippingAddress: StripeAddress?
+
+	public enum CodingKeys: String, CodingKey {
+		case billingAddress = "billing_address"
+		case shippingAddress = "shipping_address"
+		case email, name
+	}
 }
 
 public enum StripePaymentMethodCardWalletType: String, StripeModel {
@@ -133,6 +168,12 @@ public struct StripePaymentMethodCardWalletVisaCheckout: StripeModel {
 	public var name: String?
 	/// Owner’s verified shipping address. Values are verified or provided by the wallet directly (if supported) at the time of authorization or settlement. They cannot be set or mutated.
 	public var shippingAddress: StripeAddress?
+
+	public enum CodingKeys: String, CodingKey {
+		case billingAddress = "billing_address"
+		case shippingAddress = "shipping_address"
+		case email, name
+	}
 }
 
 public enum StripePaymentMethodType: String, StripeModel {
@@ -145,4 +186,11 @@ public struct StripePaymentMethodList: StripeModel {
 	public var data: [StripePaymentMethod]?
 	public var hasMore: Bool?
 	public var url: String?
+
+	public enum CodingKeys: String, CodingKey {
+		case object
+		case hasMore = "has_more"
+		case url
+		case data
+	}
 }
