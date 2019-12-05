@@ -30,6 +30,7 @@ public struct StripeSubscription: StripeModel {
     public var endedAt: Date?
     public var items: SubscriptionItemsList?
 	public var latestInvoice: StripeInvoice?
+	public var latestInvoiceId: String?
     public var livemode: Bool?
     public var metadata: [String: String]
     public var plan: StripePlan?
@@ -67,4 +68,45 @@ public struct StripeSubscription: StripeModel {
         case trialEnd = "trial_end"
         case trialStart = "trial_start"
     }
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+
+		self.id = try container.decode(String.self, forKey: .id)
+		self.object = try container.decode(String.self, forKey: .object)
+		self.applicationFeePercent = try container.decodeIfPresent(Decimal.self, forKey: .applicationFeePercent)
+		self.billing = try container.decodeIfPresent(String.self, forKey: .billing)
+		self.billingCycleAnchor = try container.decodeIfPresent(Date.self, forKey: .billingCycleAnchor)
+		self.cancelAtPeriodEnd = try container.decodeIfPresent(Bool.self, forKey: .cancelAtPeriodEnd)
+		self.canceledAt = try container.decodeIfPresent(Date.self, forKey: .canceledAt)
+		self.created = try container.decodeIfPresent(Date.self, forKey: .created)
+		self.currentPeriodEnd = try container.decodeIfPresent(Date.self, forKey: .currentPeriodEnd)
+		self.currentPeriodStart = try container.decodeIfPresent(Date.self, forKey: .currentPeriodStart)
+		self.customer = try container.decodeIfPresent(String.self, forKey: .customer)
+		self.daysUntilDue = try container.decodeIfPresent(Int.self, forKey: .daysUntilDue)
+		self.discount = try container.decodeIfPresent(StripeDiscount.self, forKey: .discount)
+		self.endedAt = try container.decodeIfPresent(Date.self, forKey: .endedAt)
+		self.items = try container.decodeIfPresent(SubscriptionItemsList.self, forKey: .items)
+
+		if let latestInvoice = try? container.decodeIfPresent(StripeInvoice.self, forKey: .latestInvoice) {
+			self.latestInvoice = latestInvoice
+			self.latestInvoiceId = latestInvoice?.id
+		}
+
+		if let latestInvoiceId = try container.decodeIfPresent(String.self, forKey: .latestInvoice) {
+			self.latestInvoiceId = latestInvoiceId
+			self.latestInvoice = nil
+		}
+
+		self.livemode = try container.decodeIfPresent(Bool.self, forKey: .livemode)
+		self.metadata = try container.decode([String: String].self, forKey: .metadata)
+		self.plan = try container.decodeIfPresent(StripePlan.self, forKey: .plan)
+		self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
+		self.start = try container.decodeIfPresent(Date.self, forKey: .start)
+		self.status = try container.decodeIfPresent(StripeSubscriptionStatus.self, forKey: .status)
+		self.taxPercent = try container.decodeIfPresent(Decimal.self, forKey: .taxPercent)
+		self.trialEnd = try container.decodeIfPresent(Date.self, forKey: .trialEnd)
+		self.trialStart = try container.decodeIfPresent(Date.self, forKey: .trialStart)
+
+	}
 }
