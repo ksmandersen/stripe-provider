@@ -93,7 +93,7 @@ public struct StripeSubscription: StripeModel {
 			self.latestInvoiceId = latestInvoice?.id
 		}
 
-		if let latestInvoiceId = try container.decodeIfPresent(String.self, forKey: .latestInvoice) {
+		if let latestInvoiceId = try? container.decodeIfPresent(String.self, forKey: .latestInvoice) {
 			self.latestInvoiceId = latestInvoiceId
 			self.latestInvoice = nil
 		}
