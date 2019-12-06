@@ -111,7 +111,7 @@ public struct StripeInvoice: StripeModel {
 
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		self.id = try container.decode(String.self, forKey: .id)
+		self.id = try container.decodeIfPresent(String.self, forKey: .id)
 		self.object = try container.decode(String.self, forKey: .object)
 
 		self.amountDue = try container.decodeIfPresent(Int.self, forKey: .amountDue)
