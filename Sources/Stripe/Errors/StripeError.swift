@@ -52,6 +52,7 @@ public struct StripeError: StripeModel, Error, Debuggable {
     public var reason: String {
         return self.error.message
     }
+
     public var error: StripeAPIError
 }
 
