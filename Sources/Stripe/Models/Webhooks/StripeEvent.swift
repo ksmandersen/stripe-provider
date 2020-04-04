@@ -466,6 +466,7 @@ public enum StripeEventObject: StripeModel {
 	case invoice(StripeInvoice)
 	case paymentIntent(StripePaymentIntent)
 	case subscription(StripeSubscription)
+	case paymentMethod(StripePaymentMethod)
 	case invalid
 
 	enum ObjectCodingKey: String, CodingKey {
@@ -483,6 +484,7 @@ public enum StripeEventObject: StripeModel {
 		case "invoice": self = .invoice(try StripeInvoice(from: decoder))
 		case "payment_intent": self = .paymentIntent(try StripePaymentIntent(from: decoder))
 		case "subscription": self = .subscription(try StripeSubscription(from: decoder))
+		case "payment_method": self = .paymentMethod(try StripePaymentMethod(from: decoder))
 		default: self = .invalid
 		}
 	}
@@ -494,6 +496,7 @@ public enum StripeEventObject: StripeModel {
 		case let .invoice(invoice): try invoice.encode(to: encoder)
 		case let .paymentIntent(paymentIntent): try paymentIntent.encode(to: encoder)
 		case let .subscription(subscription): try subscription.encode(to: encoder)
+		case let .paymentMethod(paymentMethod): try paymentMethod.encode(to: encoder)
 		default: break
 		}
 	}
