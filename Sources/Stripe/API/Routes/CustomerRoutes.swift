@@ -9,7 +9,7 @@
 import Vapor
 
 public protocol CustomerRoutes {
-    func create(accountBalance: Int?, coupon: String?, description: String?, email: String?, invoicePrefix: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: [String: Any]?, source: Any?, taxInfo: [String: String]?) throws -> Future<StripeCustomer>
+	func create(accountBalance: Int?, coupon: String?, description: String?, email: String?, invoicePrefix: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: [String: Any]?, source: Any?, paymentMethod: String?, taxInfo: [String: String]?) throws -> Future<StripeCustomer>
     func retrieve(customer: String) throws -> Future<StripeCustomer>
     func update(customer: String, accountBalance: Int?, businessVatId: String?, coupon: String?, defaultSource: String?, description: String?, email: String?, invoiceSettings: [String: Any]?, metadata: [String: String]?, shipping: ShippingLabel?, source: Any?) throws -> Future<StripeCustomer>
     func delete(customer: String) throws -> Future<StripeDeletedObject>
@@ -31,6 +31,7 @@ extension CustomerRoutes {
                        metadata: [String: String]? = nil,
                        shipping: [String: Any]? = nil,
                        source: Any? = nil,
+					   paymentMethod: String? = nil,
                        taxInfo: [String: String]? = nil) throws -> Future<StripeCustomer> {
         return try create(accountBalance: accountBalance,
                           coupon: coupon,
@@ -41,6 +42,7 @@ extension CustomerRoutes {
                           metadata: metadata,
                           shipping: shipping,
                           source: source,
+						  paymentMethod: paymentMethod,
                           taxInfo: taxInfo)
     }
     
@@ -120,6 +122,7 @@ public struct StripeCustomerRoutes: CustomerRoutes {
                        metadata: [String: String]?,
                        shipping: [String: Any]?,
                        source: Any?,
+					   paymentMethod: String?,
                        taxInfo: [String: String]?) throws -> Future<StripeCustomer> {
         var body: [String: Any] = [:]
         
@@ -158,6 +161,10 @@ public struct StripeCustomerRoutes: CustomerRoutes {
         if let tokenSource = source as? String {
             body["source"] = tokenSource
         }
+
+		if let paymentMethodId = paymentMethod {
+			body["payment_method"] = paymentMethodId
+		}
         
         if let dictionarySource = source as? [String: Any] {
             dictionarySource.forEach { body["source[\($0)]"] = $1 }
